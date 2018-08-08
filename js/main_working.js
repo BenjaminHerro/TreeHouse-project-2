@@ -9,6 +9,7 @@ const students = document.querySelectorAll('.student-item.cf');
 // is built following
 
 var buttonListener = document.querySelectorAll('div.pagination ul li a');
+var paginationView = document.querySelector('div.pagination')
 
 search.className = 'student-search';
 input.placeholder = 'Search for students...';
@@ -33,12 +34,13 @@ const getPages = (array) => {
 
 	pagination.append(pag_ul);
 	pagination.className = 'pagination';
-	if (buttonListener.length === 0) {
+	// if (buttonListener.length === 0) {
+	// 	$('.page').append(pagina
+	tion);
+	// } else {
+		$(paginationView).remove()
 		$('.page').append(pagination);
-	} else {
-		$(buttonListener).remove()
-		$('.page').append(pagination);
-	}
+	// }
 };
 
 // For each button in button array declared above, a new event listener is applied which allows
@@ -51,15 +53,22 @@ const paginate = (stuArray) => {
 		getPages(stuArray)
 		buttonListener = document.querySelectorAll('div.pagination ul li a');
 
+		buttonListener[0].className = 'active'
+		$(stuArray).hide().slice(0,10).show()
+
 		buttonListener.forEach(button => button.addEventListener(
 			'click', () => {
 				let currIndex = button.innerText
 				let currActive = document.querySelector('.active')
 				$(stuArray).hide().slice((currIndex-1)*10,currIndex*10).show()
-				buttonListener[currIndex-1].className = 'active'
-				currActive.className = ''
-				})
-			)
+				if (button.className === 'active') {
+					currActive = 'active'
+				} else {
+					buttonListener[currIndex-1].className = 'active'
+					currActive.className = ''
+				}
+			})
+		)
 };
 
 // Search function, iterates over the students array, checks whether the search bar content is an element
@@ -67,6 +76,8 @@ const paginate = (stuArray) => {
 // the function will just return.
 const searchBar = (s) => {
 	let stuShow = []
+	let paginationKeep = document.querySelectorAll('div.pagination ul li a')
+
 	if (!s) {
 		return
 	} else {
@@ -77,16 +88,15 @@ const searchBar = (s) => {
 			}
 		}
 		$(students).hide()
-		$(stuShow).show()
-		getPages(stuShow)
+		// $(stuShow).show()
+		$(paginationKeep).remove()
+		paginate(stuShow)
 	}
 };
 
 // Displays first 10 students on first load of the page. Sets that button's class to 'active'.
 $(window).on('load',function(e) {
 	paginate(students)
-	$('.student-item.cf').hide().slice(0,10).show()
-	buttonListener[0].className = 'active'
 });
 
 // Search variables and event listeners to get the value of the content within the input box and calls
