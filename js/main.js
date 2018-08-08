@@ -35,16 +35,21 @@ search.appendChild(searchButton);
 header.append(search);
 
 // Search function, iterates over the students array, checks whether the search bar content is an element
-// of the student's text content and returns all students matching.
+// of the student's text content and returns all students matching. If the text input content is none,
+// the function will just return.
 const searchBar = (s) => {
 	let stuShow = []
-	for (i=0;i<students.length;i++) {
-		if (students[i].innerText.indexOf(s) >= 0) {
-			stuShow.push(students[i])
+	if (!s) {
+		return
+	} else {
+		for (i=0;i<students.length;i++) {
+			if (students[i].innerText.indexOf(s) >= 0) {
+				stuShow.push(students[i])
+			}
 		}
+		$(students).hide()
+		$(stuShow).show()
 	}
-	$(students).hide()
-	$(stuShow).show()
 };
 
 // Displays first 10 students on first load of the page. Sets that button's class to 'active'.
