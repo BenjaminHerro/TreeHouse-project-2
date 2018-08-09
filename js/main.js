@@ -31,6 +31,7 @@ const getPages = (array) => {
 		pagination.append(noContent);
 		pagination.className = 'pagination';
 		$('.page').append(pagination);
+		return
 	}
 
 	for (i=1;i<=numberOfPages;i++) {
@@ -56,6 +57,11 @@ const getPages = (array) => {
 // end of the set, multiply both by 10 and use the jQuery slice method to display a list of students
 // within this range. The button listener then changes the active button from the previous to the current
 const paginate = (stuArray) => {
+		if (stuArray.length === 0) {
+			getPages(stuArray)
+			return
+		}
+
 		getPages(stuArray)
 		buttonListener = document.querySelectorAll('div.pagination ul li a');
 
@@ -83,6 +89,8 @@ const paginate = (stuArray) => {
 const searchBar = (s) => {
 	let stuShow = []
 	let paginationKeep = document.querySelectorAll('div.pagination')
+	let studentNames = document.querySelectorAll('div.student-details h3')
+	let studentEmails = document.querySelectorAll('div.student-details span')
 
 	if (!s) {
 		$(paginationKeep).remove()
@@ -90,13 +98,12 @@ const searchBar = (s) => {
 		return
 	} else {
 		for (i=0;i<students.length;i++) {
-			if (students[i].innerText.indexOf(s) >= 0) {
+			if (studentNames[i].innerText.indexOf(s) >= 0 ||
+				studentEmails[i].innerText.indexOf(s) >= 0) {
 				stuShow.push(students[i])
-				// students[i].hide()
 			}
 		}
 		$(students).hide()
-		// $(stuShow).show()
 		$(paginationKeep).remove()
 		paginate(stuShow)
 	}
